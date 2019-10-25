@@ -10,13 +10,12 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-
             BeautyEyeLNFHelper.frameBorderStyle = BeautyEyeLNFHelper.FrameBorderStyle.generalNoTranslucencyShadow;
             BeautyEyeLNFHelper.launchBeautyEyeLNF();
-            UIManager.put("RootPane.setupButtonVisible",false); //去掉设置按钮
-            UIManager.put("TabbedPane.tabAreaInsets",new InsetsUIResource(3, 0, 2, 20));
+            UIManager.put("RootPane.setupButtonVisible", false); //去掉设置按钮
+            UIManager.put("TabbedPane.tabAreaInsets", new InsetsUIResource(3, 0, 2, 20));
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
         new MainJFrame();

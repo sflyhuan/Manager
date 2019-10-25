@@ -2,7 +2,9 @@ package com.pingyuan.manager.bean;
 
 import com.pingyuan.manager.adb.DeviceState;
 
-public class Device {
+import javax.swing.table.DefaultTableModel;
+
+public class Device extends DefaultTableModel {
     private String id;//设备ID
     private DeviceState deviceState;//类型
     private String androidVersion;
