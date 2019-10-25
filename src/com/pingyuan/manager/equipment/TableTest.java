@@ -1,4 +1,8 @@
-package com.pingyuan.manager.equipment;
+package JTableDemo;
+
+import com.pingyuan.manager.equipment.MyTableCellEditor;
+import com.pingyuan.manager.equipment.MyTableModel;
+import com.pingyuan.manager.equipment.MyTableReander;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -14,14 +18,14 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.table.TableColumn;
 
 public class TableTest extends JDialog{
-	
+
 	public TableTest(){
 		this.setLayout(new BorderLayout());
 		this.setPreferredSize(new Dimension(400, 300));
-		this.setTitle("���DEMO");
+		this.setTitle("表格DEMO");
 		this.setVisible(true);
 		this.pack();
-		//����һ���������ű��
+		//创建一个滚动面板放表格
 		JScrollPane jspanel = new JScrollPane(
 				ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -33,30 +37,30 @@ public class TableTest extends JDialog{
 			}
 		};
 		jspanel.setViewport(view);
-		
-		
-		//������ŵ���������У������ͷ����ʾ
+
+
+		//表格必须放到滚动面板中，否则表头不显示
 		Object[][] data={{false,"22","33","44"},{false,"22","33","44"},{false,"22","33","44"},{false,"22","33","44"}};
 		MyTableModel model=new MyTableModel(data);
 		JTable table=new JTable(model);
-		
+
 		for (int i = 0; i < table.getColumnCount(); i++) {
-			table.getColumnModel().getColumn(i).setMinWidth(150);//����ÿһ�еĿ�ȵ���Сֵ
+			table.getColumnModel().getColumn(i).setMinWidth(150);//设置每一列的宽度的最小值
 		}
 		for (int i = 0; i < table.getColumnCount(); i++) {
 			TableColumn cm1 = table.getColumnModel().getColumn(i);
-			cm1.setCellRenderer(new MyTableReander());//Ϊ����ÿһ�н�����Ⱦ
+			cm1.setCellRenderer(new MyTableReander());//为表格的每一列进行渲染
 		}
-		
+
 		TableColumn cm1 = table.getColumnModel().getColumn(0);
-		cm1.setCellEditor(new MyTableCellEditor(new JCheckBox()));//��һ�з���JCheckBox�ؼ�
-		
-		table.setAutoResizeMode(table.AUTO_RESIZE_OFF);//�������ã����򲻳��ֹ�����
+		cm1.setCellEditor(new MyTableCellEditor(new JCheckBox()));//第一列放置JCheckBox控件
+
+		table.setAutoResizeMode(table.AUTO_RESIZE_OFF);//必须设置，否则不出现滚动条
 		jspanel.setViewportView(table);
 		this.add(jspanel,BorderLayout.CENTER);
 	}
-	
-	
+
+
 	public static void main(String[] args) {
 		new TableTest();
 	}

@@ -5,6 +5,18 @@ import com.pingyuan.manager.adb.DeviceState;
 import javax.swing.table.DefaultTableModel;
 
 public class Device extends DefaultTableModel {
+
+
+
+    public Object[] rowData = {"sdadas",  "sadasd", "dsada", "asddasd"};
+    public Device() {
+        super();
+        addColumn("Name");
+        addColumn("Status");
+        addColumn("Size");
+        addColumn("Speed");
+    }
+
     private String id;//设备ID
     private DeviceState deviceState;//类型
     private String androidVersion;

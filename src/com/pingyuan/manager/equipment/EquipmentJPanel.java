@@ -12,9 +12,6 @@ public class EquipmentJPanel extends JPanel {
         this.setLayout(new BorderLayout());
 
         Device device=new Device();
-        device.setId("dsajdnjas");
-        device.setAndroidBrand("dmaksmkd");
-        device.setAndroidVersion("skoadslmd");
         JTable table=new JTable(device);
 
         this.add(table, BorderLayout.CENTER);
