@@ -1,4 +1,6 @@
-package com.pingyuan.manager.adb;
+package com.pingyuan.manager.bean;
+
+import com.pingyuan.manager.adb.DeviceState;
 
 public class Device {
     private String id;//设备ID

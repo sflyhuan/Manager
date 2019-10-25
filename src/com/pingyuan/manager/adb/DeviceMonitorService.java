@@ -1,6 +1,7 @@
 package com.pingyuan.manager.adb;
 
-import com.company.log.Logger;
+import com.pingyuan.manager.bean.Device;
+import com.pingyuan.manager.logs.Logger;
 
 import java.util.ArrayList;
 import java.util.List;

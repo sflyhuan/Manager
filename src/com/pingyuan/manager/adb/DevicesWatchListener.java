@@ -1,5 +1,7 @@
 package com.pingyuan.manager.adb;
 
+import com.pingyuan.manager.bean.Device;
+
 import java.util.List;
 
 public interface DevicesWatchListener {

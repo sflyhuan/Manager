@@ -1,7 +1,7 @@
 package com.pingyuan.manager.adb;
 
 
-import com.company.log.Logger;
+import com.pingyuan.manager.logs.Logger;
 
 public class ADBHelper {
 
