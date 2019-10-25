@@ -1,7 +1,6 @@
 package com.pingyuan.manager.adb;
 
-import com.company.log.Logger;
-import com.company.test.ADBRunListener;
+import com.pingyuan.manager.logs.Logger;
 import javafx.application.Platform;
 
 import java.io.BufferedReader;
