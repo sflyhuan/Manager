@@ -23,6 +23,9 @@ public class Device extends DefaultTableModel {
     private String androidModel;//安卓设备型号
     private String androidBrand;//安卓设备名称
 
+    public Device() {
+    }
+
     public String getId() {
         return id;
     }
