@@ -16,12 +16,12 @@ public class EquipmentJPanel extends JPanel {
         // 表头（列名）
         Object[] columnNames = {"设备ID", "名称", "型号"};
         List<Device> deviceList = new ArrayList<>();
-        deviceList.add(new Device("设备ID", "名称", "型号"));
-        deviceList.add(new Device("设备ID", "名称", "型号"));
-        deviceList.add(new Device("设备ID", "名称", "型号"));
-        deviceList.add(new Device("设备ID", "名称", "型号"));
-        deviceList.add(new Device("设备ID", "名称", "型号"));
-        deviceList.add(new Device("设备ID", "名称", "型号"));
+        deviceList.add(new Device("设备ID", "20", "型号"));
+        deviceList.add(new Device("设备ID", "20", "型号"));
+        deviceList.add(new Device("设备ID", "20", "型号"));
+        deviceList.add(new Device("设备ID", "20", "型号"));
+        deviceList.add(new Device("设备ID", "20", "型号"));
+        deviceList.add(new Device("设备ID", "20", "型号"));
         String[][] data = ListUtils.listToArrayWay(deviceList);
         Device device = new Device(data, columnNames);
 
@@ -38,8 +38,7 @@ public class EquipmentJPanel extends JPanel {
             }
         }));
 
-
-
+        table.getColumnModel().getColumn(1).setCellRenderer(new ProgressCellRenderer());
 
 
 
