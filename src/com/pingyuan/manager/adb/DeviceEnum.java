@@ -6,7 +6,7 @@ package com.pingyuan.manager.adb;
  * time: 2019/4/3
  * </pre>
  */
-public enum DeviceState {
+public enum DeviceEnum {
 
     /**
      * 表示 设备已连接
@@ -30,7 +30,7 @@ public enum DeviceState {
 
     private String mState;
 
-    DeviceState(String state) {
+    DeviceEnum(String state) {
         this.mState = state;
     }
 
@@ -39,9 +39,9 @@ public enum DeviceState {
         return mState;
     }
 
-    static DeviceState getDeviceState(String state) {
-        DeviceState[] dss = DeviceState.values();
-        for (DeviceState ds : dss) {
+    static DeviceEnum getDeviceState(String state) {
+        DeviceEnum[] dss = DeviceEnum.values();
+        for (DeviceEnum ds : dss) {
             if (ds.mState.equalsIgnoreCase(state)) {
                 return ds;
             }

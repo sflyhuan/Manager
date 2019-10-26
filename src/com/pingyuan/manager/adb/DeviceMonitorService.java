@@ -115,7 +115,7 @@ public class DeviceMonitorService {
             for (String descriptionTemp : deviceDescriptionSplit) {
                 if (descriptionTemp.contains("model:")) {
                     String state = descriptionTemp.split("model:")[1];
-                    device.setDeviceState(DeviceState.getDeviceState(state));
+                    device.setDeviceEnum(DeviceEnum.getDeviceState(state));
                 }
             }
             device.setId(deviceId);
@@ -134,7 +134,6 @@ public class DeviceMonitorService {
                 device.setAndroidBrand(ADBHelper.getAndroidBrand(deviceId));
                 device.setAndroidModel(ADBHelper.getAndroidModel(deviceId));
                 device.setAndroidName(ADBHelper.getAndroidName(deviceId));
-                device.setProgressText("无");
                 tempDevices.add(device);
             }
         }
