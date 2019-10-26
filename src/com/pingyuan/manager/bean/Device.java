@@ -3,25 +3,30 @@ package com.pingyuan.manager.bean;
 import com.pingyuan.manager.adb.DeviceState;
 
 import javax.swing.table.DefaultTableModel;
+import java.util.Objects;
 
 public class Device extends DefaultTableModel {
 
-
-
-    public Object[] rowData = {"sdadas",  "sadasd", "dsada", "asddasd"};
-    public Device() {
-        super();
-        addColumn("Name");
-        addColumn("Status");
-        addColumn("Size");
-        addColumn("Speed");
-    }
-
     private String id;//设备ID
-    private DeviceState deviceState;//类型
-    private String androidVersion;
     private String androidModel;//安卓设备型号
     private String androidBrand;//安卓设备名称
+    private DeviceState deviceState;//类型
+    private String androidVersion;//Android版本
+
+    public Device() {
+    }
+
+    public Device(Object[][] data, Object[] columnNames) {
+        super(data, columnNames);
+    }
+
+    public Device(String id, String androidModel, String androidBrand) {
+        this.id = id;
+        this.androidModel = androidModel;
+        this.androidBrand = androidBrand;
+    }
+
+
 
     public Device() {
     }

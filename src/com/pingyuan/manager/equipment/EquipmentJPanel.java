@@ -1,39 +1,50 @@
 package com.pingyuan.manager.equipment;
 
 import com.pingyuan.manager.bean.Device;
+import com.pingyuan.manager.utils.ListUtils;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.lang.reflect.Field;
-
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EquipmentJPanel extends JPanel {
-
     public EquipmentJPanel() {
+        this.setLayout(new BorderLayout());
+        //TODO 开启搜索服务
+        // 表头（列名）
+        Object[] columnNames = {"设备ID", "名称", "型号"};
+        List<Device> deviceList = new ArrayList<>();
+        deviceList.add(new Device("设备ID", "20", "型号"));
+        deviceList.add(new Device("设备ID", "20", "型号"));
+        deviceList.add(new Device("设备ID", "20", "型号"));
+        deviceList.add(new Device("设备ID", "20", "型号"));
+        deviceList.add(new Device("设备ID", "20", "型号"));
+        deviceList.add(new Device("设备ID", "20", "型号"));
+        String[][] data = ListUtils.listToArrayWay(deviceList);
+        Device device = new Device(data, columnNames);
 
-        JTable table = new JTable(5,13);
-      //  table.setFillsViewportHeight(true);
-      //  table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        JTable table = new JTable(device);
+        table.setRowSelectionAllowed(false);
 
-        Device devices = new Device();
+        table.getColumnModel().getColumn(0).setCellRenderer(new ButtonRenderer());
+        table.getColumnModel().getColumn(0).setCellEditor(new ButtonCellEditor(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int res = JOptionPane.showConfirmDialog(null,
+                        "Do you want to add 1 to it?", "choose one",
+                        JOptionPane.YES_NO_OPTION);
+            }
+        }));
+
+        table.getColumnModel().getColumn(1).setCellRenderer(new ProgressCellRenderer());
 
 
 
-        this.add(table);
-
-
-
-        JButton button1 = new JButton();
-        JButton button2 = new JButton();
-        button1.setBounds(300,300,300,300);
-        button1.setText("确定");
-        button2.setText("取消");
-        button1.setBounds(400,400,400,400);
-        this.add(button1);
-        this.add(button2);
-
+        this.add(table.getTableHeader(), BorderLayout.NORTH);
+        this.add(table, BorderLayout.CENTER);
     }
+
 }
 
