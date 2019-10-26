@@ -8,6 +8,9 @@ import javax.swing.plaf.InsetsUIResource;
 
 public class Main {
 
+    public static final String SERVER_ROOT_PATH ="d://test//py-data";
+    public static final String CLIENT_ROOT_PATH ="//sdcard//py-data";
+
     public static void main(String[] args) {
         try {
             BeautyEyeLNFHelper.frameBorderStyle = BeautyEyeLNFHelper.FrameBorderStyle.generalNoTranslucencyShadow;

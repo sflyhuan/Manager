@@ -1,38 +1,18 @@
 package com.pingyuan.manager.bean;
 
-import com.pingyuan.manager.adb.DeviceState;
+import com.pingyuan.manager.adb.DeviceEnum;
+import com.pingyuan.manager.adb.EquipmentEnum;
 
-import javax.swing.table.DefaultTableModel;
-import java.util.Objects;
-
-public class Device extends DefaultTableModel {
+public class Device {
 
     private String id;//设备ID
     private String androidName;//安卓设备名称
     private String androidBrand;//安卓设备平台
     private String androidModel;//安卓设备型号
-    private String progressText;//进度
-
-    private DeviceState deviceState;//类型
-
-    @Override
-    public boolean isCellEditable(int row, int column) {
-        return false;
-    }
+    private EquipmentEnum equipmentEnum = EquipmentEnum.UNKNOW;//设备状态
+    private DeviceEnum deviceEnum;//类型
 
     public Device() {
-    }
-
-    public Device(Object[][] data, Object[] columnNames) {
-        super(data, columnNames);
-    }
-
-    public Device(String id, String androidName, String androidBrand, String androidModel, String progressText) {
-        this.id = id;
-        this.androidName = androidName;
-        this.androidBrand = androidBrand;
-        this.androidModel = androidModel;
-        this.progressText = progressText;
     }
 
     public String getId() {
@@ -43,12 +23,12 @@ public class Device extends DefaultTableModel {
         this.id = id;
     }
 
-    public String getAndroidModel() {
-        return androidModel;
+    public String getAndroidName() {
+        return androidName;
     }
 
-    public void setAndroidModel(String androidModel) {
-        this.androidModel = androidModel;
+    public void setAndroidName(String androidName) {
+        this.androidName = androidName;
     }
 
     public String getAndroidBrand() {
@@ -59,27 +39,27 @@ public class Device extends DefaultTableModel {
         this.androidBrand = androidBrand;
     }
 
-    public String getAndroidName() {
-        return androidName;
+    public String getAndroidModel() {
+        return androidModel;
     }
 
-    public void setAndroidName(String androidName) {
-        this.androidName = androidName;
+    public void setAndroidModel(String androidModel) {
+        this.androidModel = androidModel;
     }
 
-    public String getProgressText() {
-        return progressText;
+    public EquipmentEnum getEquipmentEnum() {
+        return equipmentEnum;
     }
 
-    public void setProgressText(String progressText) {
-        this.progressText = progressText;
+    public void setEquipmentEnum(EquipmentEnum equipmentEnum) {
+        this.equipmentEnum = equipmentEnum;
     }
 
-    public DeviceState getDeviceState() {
-        return deviceState;
+    public DeviceEnum getDeviceEnum() {
+        return deviceEnum;
     }
 
-    public void setDeviceState(DeviceState deviceState) {
-        this.deviceState = deviceState;
+    public void setDeviceEnum(DeviceEnum deviceEnum) {
+        this.deviceEnum = deviceEnum;
     }
 }

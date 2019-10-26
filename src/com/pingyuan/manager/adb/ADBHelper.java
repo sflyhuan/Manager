@@ -12,15 +12,25 @@ public class ADBHelper {
      * @param to
      * @return
      */
-    public static boolean pull(String deviceId, String from, String to) {
-        String run = "pull " + from + " " + to + "";
-        String result = AdbUtils.executeADBCommand(deviceId, run);
-        Logger.d(result);
-        if (!result.trim().contains("file pulled")) {
-            return false;
+    public static void pull(String deviceId, String[] from, String[] to, ADBRunListener adbRunListener) {
+        boolean isSuccess = true;
+        String msg = null;
+        if (from.length > 0) {
+            for (int i = 0; i < from.length; i++) {
+                String run = "pull " + from[i] + " " + to[i] + "";
+                String result = AdbUtils.executeADBCommand(deviceId, run);
+                Logger.d(result);
+                if (!result.trim().contains("files pushed")) {
+                    msg = result;
+                    isSuccess = false;
+                }
+            }
         }
-
-        return true;
+        if (isSuccess) {
+            adbRunListener.onFinish();
+        } else {
+            adbRunListener.onError(msg);
+        }
     }
 
     /**
@@ -30,14 +40,25 @@ public class ADBHelper {
      * @param to
      * @return
      */
-    public static boolean push(String deviceId, String from, String to) {
-        String run = "push " + from + " " + to + "";
-        String result = AdbUtils.executeADBCommand(deviceId, run);
-        Logger.d(result);
-        if (!result.trim().contains("files pushed")) {
-            return false;
+    public static void push(String deviceId, String[] from, String[] to, ADBRunListener adbRunListener) {
+        boolean isSuccess = true;
+        String msg = null;
+        if (from.length > 0) {
+            for (int i = 0; i < from.length; i++) {
+                String run = "push " + from[i] + " " + to[i] + "";
+                String result = AdbUtils.executeADBCommand(deviceId, run);
+                Logger.d(result);
+                if (!result.trim().contains("files pushed")) {
+                    msg = result;
+                    isSuccess = false;
+                }
+            }
         }
-        return true;
+        if (isSuccess) {
+            adbRunListener.onFinish();
+        } else {
+            adbRunListener.onError(msg);
+        }
     }
 
 
