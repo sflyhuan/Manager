@@ -78,7 +78,7 @@ public class AdbUtils {
 
         //TODO 获取选择的devices
         Device selectedDevice = null;
-        return new File("src/com/company/adb/adb.exe ").getAbsolutePath()
+        return new File("src/com/pingyuan/manager/adb/adb.exe ").getAbsolutePath()
                 + (deviceId != null ? "-s " + deviceId + " " : "") + command;
     }
 

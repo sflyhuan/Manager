@@ -6,6 +6,7 @@ import java.awt.*;
 
 public class ButtonRenderer implements TableCellRenderer {
     private JPanel panel;
+
     private JButton button;
 
     public ButtonRenderer() {

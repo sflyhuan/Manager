@@ -130,6 +130,11 @@ public class DeviceMonitorService {
         for (Device device : devices) {
             boolean checkDevice = checkDevice(mDeviceList, device);
             if (!checkDevice) {
+                String deviceId = device.getId();
+                device.setAndroidBrand(ADBHelper.getAndroidBrand(deviceId));
+                device.setAndroidModel(ADBHelper.getAndroidModel(deviceId));
+                device.setAndroidName(ADBHelper.getAndroidName(deviceId));
+                device.setProgressText("无");
                 tempDevices.add(device);
             }
         }

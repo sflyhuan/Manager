@@ -8,13 +8,17 @@ import java.util.Objects;
 public class Device extends DefaultTableModel {
 
     private String id;//设备ID
+    private String androidName;//安卓设备名称
+    private String androidBrand;//安卓设备平台
     private String androidModel;//安卓设备型号
-    private String androidBrand;//安卓设备名称
     private String progressText;//进度
-    private String updateButtonText;//上传
-    private String saveButtonText;//取回
+
     private DeviceState deviceState;//类型
-    private String androidVersion;//Android版本
+
+    @Override
+    public boolean isCellEditable(int row, int column) {
+        return false;
+    }
 
     public Device() {
     }
@@ -23,14 +27,12 @@ public class Device extends DefaultTableModel {
         super(data, columnNames);
     }
 
-    public Device(String id, String androidModel, String androidBrand, String progressText,
-                  String updateButtonText, String saveButtonText) {
+    public Device(String id, String androidName, String androidBrand, String androidModel, String progressText) {
         this.id = id;
-        this.androidModel = androidModel;
+        this.androidName = androidName;
         this.androidBrand = androidBrand;
+        this.androidModel = androidModel;
         this.progressText = progressText;
-        this.updateButtonText = updateButtonText;
-        this.saveButtonText = saveButtonText;
     }
 
     public String getId() {
@@ -39,22 +41,6 @@ public class Device extends DefaultTableModel {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public DeviceState getDeviceState() {
-        return deviceState;
-    }
-
-    public void setDeviceState(DeviceState deviceState) {
-        this.deviceState = deviceState;
-    }
-
-    public String getAndroidVersion() {
-        return androidVersion;
-    }
-
-    public void setAndroidVersion(String androidVersion) {
-        this.androidVersion = androidVersion;
     }
 
     public String getAndroidModel() {
@@ -73,27 +59,27 @@ public class Device extends DefaultTableModel {
         this.androidBrand = androidBrand;
     }
 
-    public String getProgressIndex() {
+    public String getAndroidName() {
+        return androidName;
+    }
+
+    public void setAndroidName(String androidName) {
+        this.androidName = androidName;
+    }
+
+    public String getProgressText() {
         return progressText;
     }
 
-    public void setProgressIndex(String progressText) {
+    public void setProgressText(String progressText) {
         this.progressText = progressText;
     }
 
-    public String getUpdateButtonText() {
-        return updateButtonText;
+    public DeviceState getDeviceState() {
+        return deviceState;
     }
 
-    public void setUpdateButtonText(String updateButtonText) {
-        this.updateButtonText = updateButtonText;
-    }
-
-    public String getSaveButtonText() {
-        return saveButtonText;
-    }
-
-    public void setSaveButtonText(String saveButtonText) {
-        this.saveButtonText = saveButtonText;
+    public void setDeviceState(DeviceState deviceState) {
+        this.deviceState = deviceState;
     }
 }
