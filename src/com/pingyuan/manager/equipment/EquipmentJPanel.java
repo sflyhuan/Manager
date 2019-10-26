@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Vector;
 
 public class EquipmentJPanel extends JPanel {
-    private Object[] columnNames = {"设备ID", "名称", "平台", "型号", "状态"};
+ //   private Object[] columnNames = {"设备ID", "名称", "平台", "型号", "状态"};
 
     List<Device> mDeviceList = new ArrayList<>();
     private JTable mTable = null;
@@ -92,27 +92,6 @@ public class EquipmentJPanel extends JPanel {
         mDefaultTableModel.addColumn("型号");
         mDefaultTableModel.addColumn("状态");
 
-        //查
-        //1、xml文件，
-        //2.添加初始数据
-
-        //删
-        //zhapdao user
-        //便利xml节点，对比userID，删除对应节点，保存新的xml
-
-        //增改  界面      增加   修改
-        //操作xml，增加节点，保存新xml,
-        //数据添加至表格
-        //拍照
-        for (int i = 0; i < 20; i++) {
-            Vector<Object> vector = new Vector<>();
-            vector.add(device.getId());
-            vector.add(device.getAndroidName());
-            vector.add(device.getAndroidBrand());
-            vector.add(device.getAndroidModel());
-            vector.add(device.getProgressText());
-            mDefaultTableModel.addRow(vector);
-        }
 
         mTable = new JTable(mDefaultTableModel);
         mTable.setRowHeight(50);
