@@ -9,7 +9,7 @@ import java.awt.*;
 
 public class MainJFrame extends JFrame {
     // 选项卡垂直
-    JTabbedPane jtp = new JTabbedPane(JTabbedPane.LEFT);
+    JTabbedPane jtp = new JTabbedPane(JTabbedPane.TOP);
 
     EquipmentJPanel equipmentJPanel = new EquipmentJPanel();  //设备
     UsersJPanel usersJPanel = new UsersJPanel();
