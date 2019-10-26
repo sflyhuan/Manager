@@ -14,8 +14,6 @@ public class EquipmentJPanel extends JPanel {
 
     public EquipmentJPanel() {
         this.setLayout(new BorderLayout());
-        //TODO 开启搜索服务
-        // 表头（列名）
         Object[] columnNames = {"设备ID", "名称", "型号", "状态", "上传", "取回"};
         List<Device> deviceList = new ArrayList<>();
         deviceList.add(new Device("设备ID", "20", "型号", "无", "上传", "取回"));
@@ -28,6 +26,8 @@ public class EquipmentJPanel extends JPanel {
         Device device = new Device(data, columnNames);
 
         table = new JTable(device);
+        table.setShowHorizontalLines(true);
+        table.setShowVerticalLines(true);
         table.setRowSelectionAllowed(false);
         table.getColumnModel().getColumn(4).setCellRenderer(new ButtonRenderer());
         table.getColumnModel().getColumn(4).setCellEditor(new ButtonCellEditor(new AbstractAction() {
