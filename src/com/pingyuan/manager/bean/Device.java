@@ -10,6 +10,9 @@ public class Device extends DefaultTableModel {
     private String id;//设备ID
     private String androidModel;//安卓设备型号
     private String androidBrand;//安卓设备名称
+    private String progressText;//进度
+    private String updateButtonText;//上传
+    private String saveButtonText;//取回
     private DeviceState deviceState;//类型
     private String androidVersion;//Android版本
 
@@ -20,13 +23,15 @@ public class Device extends DefaultTableModel {
         super(data, columnNames);
     }
 
-    public Device(String id, String androidModel, String androidBrand) {
+    public Device(String id, String androidModel, String androidBrand, String progressText,
+                  String updateButtonText, String saveButtonText) {
         this.id = id;
         this.androidModel = androidModel;
         this.androidBrand = androidBrand;
+        this.progressText = progressText;
+        this.updateButtonText = updateButtonText;
+        this.saveButtonText = saveButtonText;
     }
-
-
 
     public String getId() {
         return id;
@@ -66,5 +71,29 @@ public class Device extends DefaultTableModel {
 
     public void setAndroidBrand(String androidBrand) {
         this.androidBrand = androidBrand;
+    }
+
+    public String getProgressIndex() {
+        return progressText;
+    }
+
+    public void setProgressIndex(String progressText) {
+        this.progressText = progressText;
+    }
+
+    public String getUpdateButtonText() {
+        return updateButtonText;
+    }
+
+    public void setUpdateButtonText(String updateButtonText) {
+        this.updateButtonText = updateButtonText;
+    }
+
+    public String getSaveButtonText() {
+        return saveButtonText;
+    }
+
+    public void setSaveButtonText(String saveButtonText) {
+        this.saveButtonText = saveButtonText;
     }
 }
