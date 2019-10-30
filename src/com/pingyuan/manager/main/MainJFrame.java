@@ -12,7 +12,7 @@ public class MainJFrame extends JFrame {
     JTabbedPane jtp = new JTabbedPane(JTabbedPane.TOP);
 
     EquipmentJPanel equipmentJPanel = new EquipmentJPanel();  //设备
-    UsersJPanel usersJPanel = new UsersJPanel();
+    UsersJPanel usersJPanel = new UsersJPanel(this);
     LogsJPanel logsJPanel = new LogsJPanel();
 
 

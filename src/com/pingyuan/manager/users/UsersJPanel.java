@@ -1,7 +1,6 @@
 package com.pingyuan.manager.users;
 
 import com.pingyuan.manager.bean.User;
-import com.pingyuan.manager.logs.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -11,11 +10,10 @@ import org.dom4j.io.XMLWriter;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -25,22 +23,23 @@ import java.util.Vector;
 
 
 public class UsersJPanel extends JPanel {
-    //   private Object[] columnNames = {"用户ID", "用户名", "登录ID", "登录密码", "用户类型", "用户专业", "用户照片"};
-
     private List<User> mUuserList = new ArrayList<>();
     private JTable mTable = null;
     private DefaultTableModel mDefaultTableModel; //表格模型
+    private JFrame jFrame;
 
-    public UsersJPanel() {
+    public UsersJPanel(JFrame jFrame) {
+        this.jFrame = jFrame;
         this.setLayout(new BorderLayout());
-        createJTable();
         createButton();
+        createJTable();
     }
 
     /**
      * 创建表格
      */
     private void createJTable() {
+        mDefaultTableModel = new DefaultTableModel();
         mDefaultTableModel.addColumn("ID");
         mDefaultTableModel.addColumn("用户名");
         mDefaultTableModel.addColumn("登录ID");
@@ -60,18 +59,13 @@ public class UsersJPanel extends JPanel {
 
         mTable = new JTable(mDefaultTableModel);
         mTable.setRowHeight(50);
-        mTable.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
         mTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         mTable.setShowHorizontalLines(true);
         mTable.setShowVerticalLines(false);
-        mTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                int row = mTable.getSelectedRow();
-            }
-        });
         this.add(mTable.getTableHeader(), BorderLayout.NORTH);
-        this.add(mTable, BorderLayout.CENTER);
+        JScrollPane pane=new JScrollPane(mTable);
+
+        this.add(pane, BorderLayout.CENTER);
     }
 
 
@@ -91,55 +85,142 @@ public class UsersJPanel extends JPanel {
         modBtn.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.normal));
         delBtn.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.normal));
 
-        addBtn.addActionListener(new AbstractAction() {
+        // 增加用户
+        addBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int[] selectedRows = mTable.getSelectedRows();
-                UserDialog jDialog = new UserDialog();
-                jDialog.setVisible(true);
+                showCustomDialog(jFrame, jFrame,true);
             }
         });
 
-
+        //修改用户
         modBtn.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int[] selectedRows = mTable.getSelectedRows();
-                Logger.e("修改" + selectedRows[0]);
-                UserDialog jDialog = new UserDialog(mUuserList.get(selectedRows[0]));
-                jDialog.setVisible(true);
-
-
-
+                if (mTable.getSelectedRow()>0){
+                    showCustomDialog(jFrame, jFrame,false);
+                }
             }
         });
+
+        //删除选中用户
         delBtn.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int[] selectedRows = mTable.getSelectedRows();
-                Logger.e("删除" + selectedRows[0]);
+                remove();
             }
         });
         this.add(jPanel, BorderLayout.SOUTH);
+
     }
 
-    // 点击增加节点
-    public void add() {
 
-        List<User> userList = new ArrayList<>();
+    /**
+     * 显示一个自定义的对话框
+     *
+     * @param owner           对话框的拥有者
+     * @param parentComponent 对话框的父级组件
+     */
+    private void showCustomDialog(Frame owner, Component parentComponent,boolean isAdd) {
+        // 创建一个模态对话框
+        final JDialog dialog = new JDialog(owner, "注册新用户", true);
+        // 设置对话框的宽高
+        dialog.setSize(400, 600);
+        // 设置对话框大小不可改变
+        dialog.setResizable(false);
+        // 设置对话框相对显示的位置
+        dialog.setLocationRelativeTo(parentComponent);
+
+        // 设置对话框的内容面板
+        dialog.setContentPane(new UserDialogPanel(owner, isAdd?null:mUuserList.get(mTable.getSelectedRow()), new UserAddListener() {
+
+            @Override
+            public void addSuccess(User user) {
+                Vector<Object> vector = new Vector<>();
+                vector.add(user.getUserID());
+                vector.add(user.getUserName());
+                vector.add(user.getLoginID());
+                vector.add(user.getUserType());
+                vector.add(user.getUserProfession());
+                mDefaultTableModel.addRow(vector);
+                dialog.dispose();
+            }
+
+            @Override
+            public void updateSuccess(User user) {
+                int selectedRow = mTable.getSelectedRow();
+                Vector<Object> vector = new Vector<>();
+                vector.add(user.getUserID());
+                vector.add(user.getUserName());
+                vector.add(user.getLoginID());
+                vector.add(user.getUserType());
+                vector.add(user.getUserProfession());
+                mDefaultTableModel.removeRow(selectedRow);
+                mUuserList.remove(selectedRow);
+                mDefaultTableModel.addRow(vector);
+                mUuserList.add(user);
+                dialog.dispose();
+
+            }
+
+            @Override
+            public void updateFailed() {
+                showMsg("更新用户异常，请重试");
+                dialog.dispose();
+            }
+
+            @Override
+            public void dispose() {
+                dialog.dispose();
+            }
+
+            @Override
+            public void addFailed() {
+                showMsg("更新新增户异常，请重试");
+                dialog.dispose();
+            }
+        }));
+        // 显示对话框
+        dialog.setVisible(true);
+    }
+
+
+    public void showMsg(String msg) {
+        JOptionPane.showMessageDialog(
+                null,
+                msg,
+                "消息",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+
+
+    //删除
+    private void remove() {
+        int i = mTable.getSelectedRow();
+        User user = mUuserList.get(i);
+        int result = JOptionPane.showConfirmDialog(null, "是否删除", "删除用户", JOptionPane.YES_NO_OPTION);
+        if (result == 0) {
+            deleteUser(user.getUserID());
+            mDefaultTableModel.removeRow(i);
+        }
+    }
+
+    private void deleteUser(String id) {
+        File file = new File("src/com/pingyuan/manager/users/users.xml");
         SAXReader saxReader = new SAXReader();
         try {
-            File file = new File("src/com/pingyuan/manager/users/users.xml");
             Document document = saxReader.read(file);
             Element rootElement = document.getRootElement();
-            Element user = rootElement.addElement("user");
-            user.addAttribute("userID", "");
-            user.addAttribute("userName", "");
-            user.addAttribute("loginID", "");
-            user.addAttribute("loginPassword", "");
-            user.addAttribute("userType", "");
-            user.addAttribute("userProfession", "");
-            user.addAttribute("userPicture", "");
+            List<Element> elementList = rootElement.elements("user");
+            if (elementList.size() > 0) {
+                for (Element element : elementList) {
+                    String userID = element.elementText("userID");
+                    if (id.equalsIgnoreCase(userID)) {
+                        rootElement.remove(element);
+                    }
+                }
+            }
+
             OutputFormat format = OutputFormat.createPrettyPrint();
             //设置编码格式
             format.setEncoding("UTF-8");
@@ -154,8 +235,21 @@ public class UsersJPanel extends JPanel {
         } catch (DocumentException e) {
             e.printStackTrace();
         }
-
     }
+
+    public interface UserAddListener {
+        void addSuccess(User user);
+
+        void updateSuccess(User user);
+
+        void updateFailed();
+
+        void dispose();
+
+        void addFailed();
+    }
+
 }
+
 
 
