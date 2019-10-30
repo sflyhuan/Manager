@@ -26,7 +26,6 @@ public class LogPanel extends JPanel {
 
     private void createJTable() {
         defaultTableModel = new DefaultTableModel();
-        defaultTableModel.addColumn("ID");
         defaultTableModel.addColumn("用户名");
         defaultTableModel.addColumn("登陆日期");
         defaultTableModel.addColumn("行为");
@@ -54,7 +53,6 @@ public class LogPanel extends JPanel {
      */
     private void addLogRow(Log log){
         Vector<Object> vector = new Vector<>();
-        vector.add(log.getUserID());
         vector.add(log.getUserName());
         vector.add(log.getDate());
         vector.add(log.getAction());
