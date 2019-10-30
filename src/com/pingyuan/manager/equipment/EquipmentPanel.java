@@ -4,6 +4,7 @@ import com.pingyuan.manager.Main;
 import com.pingyuan.manager.adb.*;
 import com.pingyuan.manager.bean.Device;
 import com.pingyuan.manager.bean.FilePath;
+import com.pingyuan.manager.utils.CustomDefaultTableModel;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
 
 import javax.swing.*;
@@ -12,6 +13,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +24,7 @@ public class EquipmentPanel extends JPanel {
 
     List<Device> mDeviceList = new ArrayList<>();
     private JTable mTable = null;
-    private DefaultTableModel mDefaultTableModel;
+    private CustomDefaultTableModel mDefaultTableModel;
 
     public EquipmentPanel() {
         this.setLayout(new BorderLayout());
@@ -193,7 +195,7 @@ public class EquipmentPanel extends JPanel {
      * 创建表格
      */
     private void createJTable() {
-        mDefaultTableModel = new DefaultTableModel();
+        mDefaultTableModel = new CustomDefaultTableModel();
         mDefaultTableModel.addColumn("设备ID");
         mDefaultTableModel.addColumn("名称");
         mDefaultTableModel.addColumn("平台");
@@ -206,12 +208,13 @@ public class EquipmentPanel extends JPanel {
         mTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         mTable.setShowHorizontalLines(true);
         mTable.setShowVerticalLines(false);
-        mTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        mTable.getColumnModel().getColumn(0).setCellRenderer(new ButtonRenderer());
+        mTable.getColumnModel().getColumn(0).setCellEditor(new ButtonCellEditor(new ActionListener() {
             @Override
-            public void valueChanged(ListSelectionEvent e) {
-                int row = mTable.getSelectedRow();
+            public void actionPerformed(ActionEvent e) {
+
             }
-        });
+        }));
         this.add(mTable.getTableHeader(), BorderLayout.NORTH);
         this.add(new JScrollPane(mTable), BorderLayout.CENTER);
     }
