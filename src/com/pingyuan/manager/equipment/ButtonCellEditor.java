@@ -10,30 +10,27 @@ import java.awt.event.ActionListener;
 
 public class ButtonCellEditor extends AbstractCellEditor implements TableCellEditor {
 
-    private static final long serialVersionUID = -6546334664166791132L;
-    private JPanel panel;
-    private JButton button;
-    Object value;
+    private Object mValue;
+    private JButton mJButton;
 
     public ButtonCellEditor(ActionListener actionListener) {
-        panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-        button = new JButton();
-        panel.add(this.button, BorderLayout.CENTER);
-        button.addActionListener(actionListener);
+        mJButton = new JButton();
+        mJButton.addActionListener(actionListener);
     }
 
 
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value,
                                                  boolean isSelected, int row, int column) {
-        this.value=value;
-        button.setText(value == null ? "" : String.valueOf(value));
-        return panel;
+        mValue=value;
+        ImageIcon image = new ImageIcon((String) value);
+        image.setImage(image.getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT));
+        mJButton.setIcon(image);
+        return mJButton;
     }
 
     @Override
     public Object getCellEditorValue() {
-        return value;
+        return mValue;
     }
 }

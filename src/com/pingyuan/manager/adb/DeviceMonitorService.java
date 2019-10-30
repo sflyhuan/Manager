@@ -2,6 +2,7 @@ package com.pingyuan.manager.adb;
 
 import com.pingyuan.manager.bean.Device;
 import com.pingyuan.manager.utils.Logger;
+import com.pingyuan.manager.utils.RomUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -126,12 +127,11 @@ public class DeviceMonitorService {
 
     private synchronized List<Device> findNewDevices(List<Device> devices) {
         List<Device> tempDevices = new ArrayList<>();
-        int size = mDeviceList.size();
         for (Device device : devices) {
             boolean checkDevice = checkDevice(mDeviceList, device);
             if (!checkDevice) {
                 String deviceId = device.getId();
-                device.setAndroidBrand(ADBHelper.getAndroidBrand(deviceId));
+                device.setAndroidBrand(RomUtils.getChineseName(ADBHelper.getAndroidBrand(deviceId)));
                 device.setAndroidModel(ADBHelper.getAndroidModel(deviceId));
                 device.setAndroidName(ADBHelper.getAndroidName(deviceId));
                 tempDevices.add(device);

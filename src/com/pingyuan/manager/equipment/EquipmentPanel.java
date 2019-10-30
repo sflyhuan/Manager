@@ -5,12 +5,15 @@ import com.pingyuan.manager.adb.*;
 import com.pingyuan.manager.bean.Device;
 import com.pingyuan.manager.bean.FilePath;
 import com.pingyuan.manager.utils.CustomDefaultTableModel;
+import com.pingyuan.manager.utils.MsgManager;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,8 +23,6 @@ import java.util.List;
 import java.util.Vector;
 
 public class EquipmentPanel extends JPanel {
-    private Object[] columnNames = {"设备ID", "名称", "平台", "型号", "状态"};
-
     List<Device> mDeviceList = new ArrayList<>();
     private JTable mTable = null;
     private CustomDefaultTableModel mDefaultTableModel;
@@ -39,11 +40,13 @@ public class EquipmentPanel extends JPanel {
                 mDeviceList.addAll(deviceList);
                 for (Device device : deviceList) {
                     Vector<Object> vector = new Vector<>();
-                    vector.add(device.getId());
                     vector.add(device.getAndroidName());
+                    vector.add(device.getId());
                     vector.add(device.getAndroidBrand());
                     vector.add(device.getAndroidModel());
                     vector.add(device.getEquipmentEnum().getName());
+                    vector.add("src\\resources\\push.png");
+                    vector.add("src\\resources\\pull.png");
                     mDefaultTableModel.addRow(vector);
                 }
             }
@@ -196,25 +199,52 @@ public class EquipmentPanel extends JPanel {
      */
     private void createJTable() {
         mDefaultTableModel = new CustomDefaultTableModel();
-        mDefaultTableModel.addColumn("设备ID");
         mDefaultTableModel.addColumn("名称");
+        mDefaultTableModel.addColumn("设备ID");
         mDefaultTableModel.addColumn("平台");
         mDefaultTableModel.addColumn("型号");
         mDefaultTableModel.addColumn("状态");
+        mDefaultTableModel.addColumn("推送");
+        mDefaultTableModel.addColumn("取回");
 
         mTable = new JTable(mDefaultTableModel);
         mTable.setRowHeight(50);
         mTable.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
-        mTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        mTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         mTable.setShowHorizontalLines(true);
         mTable.setShowVerticalLines(false);
-        mTable.getColumnModel().getColumn(0).setCellRenderer(new ButtonRenderer());
-        mTable.getColumnModel().getColumn(0).setCellEditor(new ButtonCellEditor(new ActionListener() {
+        mTable.setRowSelectionAllowed(false);
+        // 获取表头
+        JTableHeader jTableHeader = mTable.getTableHeader();
+        // 设置用户是否可以通过在头间拖动来调整各列的大小。
+        jTableHeader.setResizingAllowed(false);
+        // 设置用户是否可以拖动列头，以重新排序各列。
+        jTableHeader.setReorderingAllowed(false);
+        ((DefaultTableCellRenderer)jTableHeader.getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
+
+        mTable.getColumnModel().getColumn(5).setCellRenderer(new ButtonRenderer());
+        mTable.getColumnModel().getColumn(5).setCellEditor(new ButtonCellEditor(e -> {
+            int selectedRow = mTable.getSelectedRow();
+            MsgManager.showMsg(selectedRow + "");
+        }));
+        mTable.getColumnModel().getColumn(6).setCellRenderer(new ButtonRenderer());
+        mTable.getColumnModel().getColumn(6).setCellEditor(new ButtonCellEditor(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
             }
         }));
+
+
+        //设置单元格内容居中
+        DefaultTableCellRenderer render = new DefaultTableCellRenderer();
+        render.setHorizontalAlignment(SwingConstants.CENTER);
+        mTable.getColumnModel().getColumn(0).setCellRenderer(render);
+        mTable.getColumnModel().getColumn(1).setCellRenderer(render);
+        mTable.getColumnModel().getColumn(2).setCellRenderer(render);
+        mTable.getColumnModel().getColumn(3).setCellRenderer(render);
+        mTable.getColumnModel().getColumn(4).setCellRenderer(render);
+
         this.add(mTable.getTableHeader(), BorderLayout.NORTH);
         this.add(new JScrollPane(mTable), BorderLayout.CENTER);
     }
