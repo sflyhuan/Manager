@@ -1,4 +1,4 @@
-package com.pingyuan.manager.logs;
+package com.pingyuan.manager.utils;
 
 import javafx.application.Platform;
 

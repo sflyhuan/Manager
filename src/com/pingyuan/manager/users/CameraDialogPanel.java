@@ -3,6 +3,7 @@ package com.pingyuan.manager.users;
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamPanel;
 import com.github.sarxos.webcam.WebcamResolution;
+import com.pingyuan.manager.bean.FilePath;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -31,7 +32,7 @@ public class CameraDialogPanel extends JPanel {
         jButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String filePath = "d:/" + cameraName+".png";
+                String filePath = FilePath.getSingleton().getPushFacePath() + cameraName+".png";
                 try {
 
                     webcam.open();

@@ -1,7 +1,7 @@
 package com.pingyuan.manager.adb;
 
 
-import com.pingyuan.manager.logs.Logger;
+import com.pingyuan.manager.utils.Logger;
 
 public class ADBHelper {
 
@@ -20,7 +20,7 @@ public class ADBHelper {
                 String run = "pull " + from[i] + " " + to[i] + "";
                 String result = AdbUtils.executeADBCommand(deviceId, run);
                 Logger.d(result);
-                if (!result.trim().contains("files pushed")) {
+                if (!result.trim().contains("pulled")) {
                     msg = result;
                     isSuccess = false;
                 }
@@ -48,7 +48,7 @@ public class ADBHelper {
                 String run = "push " + from[i] + " " + to[i] + "";
                 String result = AdbUtils.executeADBCommand(deviceId, run);
                 Logger.d(result);
-                if (!result.trim().contains("files pushed")) {
+                if (!result.trim().contains("pushed")) {
                     msg = result;
                     isSuccess = false;
                 }

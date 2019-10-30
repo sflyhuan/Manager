@@ -1,6 +1,6 @@
 package com.pingyuan.manager;
 
-import com.pingyuan.manager.main.MainJFrame;
+import com.pingyuan.manager.main.MainFrame;
 import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
 
 import javax.swing.*;
@@ -21,7 +21,7 @@ public class Main {
             e.printStackTrace();
         }
 
-        new MainJFrame();
+        new MainFrame();
     }
 
 }

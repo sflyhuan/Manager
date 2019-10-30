@@ -3,6 +3,7 @@ package com.pingyuan.manager.equipment;
 import com.pingyuan.manager.Main;
 import com.pingyuan.manager.adb.*;
 import com.pingyuan.manager.bean.Device;
+import com.pingyuan.manager.bean.FilePath;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
 
 import javax.swing.*;
@@ -16,19 +17,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-public class EquipmentJPanel extends JPanel {
+public class EquipmentPanel extends JPanel {
     private Object[] columnNames = {"设备ID", "名称", "平台", "型号", "状态"};
 
     List<Device> mDeviceList = new ArrayList<>();
     private JTable mTable = null;
     private DefaultTableModel mDefaultTableModel;
 
-    public EquipmentJPanel() {
+    public EquipmentPanel() {
         this.setLayout(new BorderLayout());
-        //创建表格
-        createJTable();
         //创建按钮
         createButton();
+        //创建表格
+        createJTable();
         //开启ADB服务
         DeviceMonitorService.getSingleton().startMonitoringDevices(new DevicesWatchListener() {
             @Override
@@ -115,10 +116,8 @@ public class EquipmentJPanel extends JPanel {
                     mDefaultTableModel.setValueAt(equipmentEnum.getName(), selectedRow, 4);
                     new Thread(() -> {
                         if (equipmentEnum == EquipmentEnum.PUSH) {
-//                            String[] from = new String[]{Main.SERVER_ROOT_PATH};
-//                            String[] to = new String[]{Main.CLIENT_ROOT_PATH};
-                            String[] from = new String[]{"d://test//"};
-                            String[] to = new String[]{"//sdcard//"};
+                            String[] from = new String[]{FilePath.getSingleton().getPushPath()};
+                            String[] to = new String[]{FilePath.getSingleton().getDevicePushPath()};
                             ADBHelper.push(device.getId(), from, to, new ADBRunListener() {
                                 @Override
                                 public void onFinish(String response) {
@@ -142,16 +141,24 @@ public class EquipmentJPanel extends JPanel {
                                 }
                             });
                         } else if (equipmentEnum == EquipmentEnum.PULL) {
-//                            String[] from = new String[]{
-//                                    getDevicePath(device.getId(), "camera", false),
-//                                    getDevicePath(device.getId(), "log", false)
-//                            };
-//                            String[] to = new String[]{
-//                                    getDevicePath(device.getId(), "camera", true),
-//                                    getDevicePath(device.getId(), "log", true)
-//                            };
-                            String[] from = new String[]{"//sdcard//test//", "//sdcard//test//"};
-                            String[] to = new String[]{"d://test//", "d://test/test//"};
+                            String pullCameraPath = FilePath.getSingleton().getPullCameraPath() + File.separator + device.getId();
+                            File pullCameraFile = new File(pullCameraPath);
+                            if (pullCameraFile.exists()) {
+                                pullCameraFile.mkdirs();
+                            }
+                            String pullLogPath = FilePath.getSingleton().getPullLogPath() + File.separator + device.getId();
+                            File pullLogFile = new File(pullLogPath);
+                            if (pullLogFile.exists()) {
+                                pullLogFile.mkdirs();
+                            }
+                            String[] from = new String[]{
+                                    FilePath.getSingleton().getDevicePullCameraPath(),
+                                    FilePath.getSingleton().getDevicePullLogPath()
+                            };
+                            String[] to = new String[]{
+                                    pullCameraPath,
+                                    pullLogPath,
+                            };
 
                             ADBHelper.pull(device.getId(), from, to, new ADBRunListener() {
                                 @Override
@@ -206,19 +213,7 @@ public class EquipmentJPanel extends JPanel {
             }
         });
         this.add(mTable.getTableHeader(), BorderLayout.NORTH);
-        this.add(mTable, BorderLayout.CENTER);
-    }
-
-
-    private String getDevicePath(String deviceId, String fileName, boolean isServerPath) {
-        String path = isServerPath ? Main.SERVER_ROOT_PATH : Main.CLIENT_ROOT_PATH + File.separator + deviceId + File.separator + fileName;
-        if (isServerPath) {
-            File file = new File(path);
-            if (!file.exists()) {
-                file.mkdirs();
-            }
-        }
-        return path;
+        this.add(new JScrollPane(mTable), BorderLayout.CENTER);
     }
 
 }

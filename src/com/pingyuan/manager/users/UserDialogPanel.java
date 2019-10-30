@@ -1,12 +1,13 @@
 package com.pingyuan.manager.users;
 
+import com.pingyuan.manager.bean.FilePath;
 import com.pingyuan.manager.bean.User;
+import com.pingyuan.manager.utils.ChineseUtil;
+import com.pingyuan.manager.utils.MsgManager;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
-import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
-import org.dom4j.io.XMLWriter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,9 +16,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -29,7 +27,7 @@ public class UserDialogPanel extends JPanel {
     private Frame mFrame;
 
 
-    public UserDialogPanel(Frame frame, User mUser, UsersJPanel.UserAddListener userAddListener) {
+    public UserDialogPanel(Frame frame, User mUser, UsersPanel.UserListener userListener) {
         this.mUser = mUser;
         this.mFrame = frame;
         this.setLayout(new BorderLayout());
@@ -40,8 +38,8 @@ public class UserDialogPanel extends JPanel {
         //用户账号
         JPanel accountPanel = new JPanel();
         accountPanel.add(new JLabel("用户账号："));
-        JTextField loginIDJTextField = new JTextField(12);
-        accountPanel.add(loginIDJTextField);
+        JTextField accountTextField = new JTextField(12);
+        accountPanel.add(accountTextField);
         userInfoPanel.add(accountPanel);
 
         //密码
@@ -90,10 +88,11 @@ public class UserDialogPanel extends JPanel {
 
         JPanel imgPanel = new JPanel();
         mImgLabel = new JLabel();
-        String path = "D:\\www_yanfa_5.png";
+        String path = "src/com/pingyuan/manager/users/default_user.jpeg";
+
         if (mUser != null) {
-            mUserPicture= mUser.getUserPicture();
-            path = "D:\\" + mUser.getUserPicture() + ".png";
+            mUserPicture = mUser.getUserPicture();
+            path = FilePath.getSingleton().getPushFacePath() + mUser.getUserPicture() + ".png";
         }
         ImageIcon image = new ImageIcon(path);
         image.setImage(image.getImage().getScaledInstance(350, 350, Image.SCALE_DEFAULT));
@@ -108,7 +107,7 @@ public class UserDialogPanel extends JPanel {
         this.add(btnPanel, BorderLayout.SOUTH);
 
         if (mUser != null) {
-            loginIDJTextField.setText(mUser.getLoginID());
+            accountTextField.setText(mUser.getLoginID());
             passwordField.setText(mUser.getLoginPassword());
             repeatPasswordField.setText(mUser.getLoginPassword());
             userNameTextField.setText(mUser.getUserName());
@@ -117,12 +116,22 @@ public class UserDialogPanel extends JPanel {
         cameraButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String realName = userNameTextField.getText();
-                if (realName == null || realName.equals("")) {
-                    showMsg("姓名不能为空");
+                String account = accountTextField.getText();
+                if (account == null || account.equals("")) {
+                    MsgManager.showMsg("用户账号不能为空");
                     return;
+                } else {
+                    if (!ChineseUtil.isEnglish(account)) {
+                        MsgManager.showMsg("用户账号必须为英文");
+                        return;
+                    }
+                    String match = ChineseUtil.match(account);
+                    if (match != null) {
+                        MsgManager.showMsg("用户账号中不能包含非法字符" + match);
+                        return;
+                    }
                 }
-                String fileName = realName + "_" + "yanfa" + "_" + queryMaxUserId();
+                String fileName = account + "_" + account + "_" + queryMaxUserId();
                 showCustomDialog(mFrame, mFrame, fileName);
             }
         });
@@ -130,61 +139,95 @@ public class UserDialogPanel extends JPanel {
         okbutton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //更具Muser是否为null
-
                 //获取用户输入的用户名
-                String strLoginID = loginIDJTextField.getText();
-                if (strLoginID == null || strLoginID.equals("")) {
-                    showMsg("用户名不能为空");
+                String account = accountTextField.getText();
+                if (account == null || account.equals("")) {
+                    MsgManager.showMsg("用户账号不能为空");
                     return;
+                } else {
+                    if (!ChineseUtil.isEnglish(account)) {
+                        MsgManager.showMsg("用户账号必须为英文");
+                        return;
+                    }
+                    String match = ChineseUtil.match(account);
+                    if (match != null) {
+                        MsgManager.showMsg("用户账号中不能包含非法字符" + match);
+                        return;
+                    }
                 }
+
                 //获取用户名密码
                 String strPwd = passwordField.getText();
                 if (strPwd == null || strPwd.equals("")) {
-                    showMsg("密码不能为空");
+                    MsgManager.showMsg("密码不能为空");
                     return;
+                } else {
+                    if (!ChineseUtil.isLetterDigit(strPwd)) {
+                        MsgManager.showMsg("密码必须包含大小写字母及数字且在6-12位");
+                        return;
+                    }
+                    String match = ChineseUtil.match(strPwd);
+                    if (match != null) {
+                        MsgManager.showMsg("密码中不能包含非法字符" + match);
+                        return;
+                    }
                 }
                 String strRePwd = repeatPasswordField.getText();
                 if (strRePwd == null || strRePwd.equals("")) {
-                    showMsg("确认密码不能为空");
+                    MsgManager.showMsg("确认密码不能为空");
                     return;
+                } else {
+                    String match = ChineseUtil.match(strRePwd);
+                    if (match != null) {
+                        MsgManager.showMsg("确认密码中不能包含非法字符" + match);
+                        return;
+                    }
                 }
                 String realName = userNameTextField.getText();
                 if (realName == null || realName.equals("")) {
-                    showMsg("姓名不能为空");
+                    MsgManager.showMsg("姓名不能为空");
                     return;
+                } else {
+                    String match = ChineseUtil.match(realName);
+                    if (match != null) {
+                        MsgManager.showMsg("姓名中不能包含非法字符" + match);
+                        return;
+                    }
                 }
                 //判断确认密码是否跟密码相同
                 if (!strRePwd.equals(strPwd)) {
-                    showMsg("确认密码跟密码不同");
+                    MsgManager.showMsg("确认密码跟密码不同");
                     return;
                 }
+
                 if (null == mUserPicture || mUserPicture.equals("")) {
-                    showMsg("请采集头像");
+                    MsgManager.showMsg("请采集头像");
+                    return;
                 }
 
                 String profession = comboBox.getSelectedItem().toString();
                 if (mUser == null) {
-                    User user = add(realName, strLoginID, strPwd, profession, mUserPicture);
+                    User user = add(realName, account, strPwd, profession, mUserPicture);
                     if (user != null) {
-                        userAddListener.addSuccess(user);
-                    }else {
-                        userAddListener.addFailed();
+                        userListener.addSuccess(user);
+                    } else {
+                        userListener.addFailed();
                     }
                 } else {
+                    //判断用户信息是否修改
                     if (!realName.equalsIgnoreCase(mUser.getUserName()) ||
-                            !strLoginID.equalsIgnoreCase(mUser.getLoginID()) ||
+                            !account.equalsIgnoreCase(mUser.getLoginID()) ||
                             !strPwd.equalsIgnoreCase(mUser.getLoginPassword()) ||
                             !profession.equalsIgnoreCase(mUser.getUserProfession()) ||
                             !mUserPicture.equalsIgnoreCase(mUser.getUserPicture())) {
-                        User user = updateUser(realName, strLoginID, strPwd, profession, mUserPicture);
+                        User user = updateUser(realName, account, strPwd, profession, mUserPicture);
                         if (user != null) {
-                            userAddListener.updateSuccess(user);
+                            userListener.updateSuccess(user);
                         } else {
-                            userAddListener.updateFailed();
+                            userListener.updateFailed();
                         }
-                    }else {
-                        userAddListener.dispose();
+                    } else {
+                        userListener.dispose();
                     }
                 }
 
@@ -194,10 +237,13 @@ public class UserDialogPanel extends JPanel {
     }
 
     private User updateUser(String realName, String strLoginID, String strPwd, String profession, String userPicture) {
-
         SAXReader saxReader = new SAXReader();
         try {
-            File file = new File("src/com/pingyuan/manager/users/users.xml");
+            String pushUser = FilePath.getSingleton().getPushUserPath();
+            File file = new File(pushUser);
+            if (!file.exists()) {
+                return null;
+            }
             Document document = saxReader.read(file);
             Element rootElement = document.getRootElement();
             List<Element> elementList = rootElement.elements("user");
@@ -231,17 +277,7 @@ public class UserDialogPanel extends JPanel {
                     }
                 }
             }
-            OutputFormat format = OutputFormat.createPrettyPrint();
-            //设置编码格式
-            format.setEncoding("UTF-8");
-            try {
-                XMLWriter writer = new XMLWriter(new FileWriter(file), format);
-                //写入数据
-                writer.write(document);
-                writer.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            UserModel.saveDocument(file, document);
             return mUser;
         } catch (DocumentException e) {
             e.printStackTrace();
@@ -249,61 +285,30 @@ public class UserDialogPanel extends JPanel {
         }
     }
 
-
-    public void showMsg(String msg) {
-        JOptionPane.showMessageDialog(
-                null,
-                msg,
-                "消息",
-                JOptionPane.INFORMATION_MESSAGE);
-    }
-
     // 点击增加用户节点
     public User add(String userName, String loginID, String loginPassword, String userProfession,
                     String userPicture) {
+        String pushUser = FilePath.getSingleton().getPushUserPath();
+        File file = new File(pushUser);
+        if (!file.exists()) {
+            return null;
+        }
         String maxUserId = queryMaxUserId() + "";
-        List<User> userList = new ArrayList<>();
         SAXReader saxReader = new SAXReader();
         try {
-            File file = new File("src/com/pingyuan/manager/users/users.xml");
             Document document = saxReader.read(file);
             Element rootElement = document.getRootElement();
             Element user = rootElement.addElement("user");
 
-            //查最大的用户ID
-            Element userID = user.addElement("userID");
-            userID.setText(queryMaxUserId() + "");
+            user.addElement("userID").setText(queryMaxUserId() + "");
+            user.addElement("userName").setText(userName);
+            user.addElement("loginID").setText(loginID);
+            user.addElement("loginPassword").setText(loginPassword);
+            user.addElement("userType").setText("0");
+            user.addElement("userProfession").setText(userProfession);
+            user.addElement("userPicture").setText(userPicture);
 
-            Element userName1 = user.addElement("userName");
-            userName1.setText(userName);
-
-            Element loginID1 = user.addElement("loginID");
-            loginID1.setText(loginID);
-
-            Element loginPassword1 = user.addElement("loginPassword");
-            loginPassword1.setText(loginPassword);
-
-            Element userType = user.addElement("userType");
-            userType.setText("0");
-
-            Element userProfession1 = user.addElement("userProfession");
-            userProfession1.setText(userProfession);
-
-
-            Element userPicture1 = user.addElement("userPicture");
-            userPicture1.setText(userPicture);
-
-            OutputFormat format = OutputFormat.createPrettyPrint();
-            //设置编码格式
-            format.setEncoding("UTF-8");
-            try {
-                XMLWriter writer = new XMLWriter(new FileWriter(file), format);
-                //写入数据
-                writer.write(document);
-                writer.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            UserModel.saveDocument(file, document);
             return new User(maxUserId, userName, loginID, loginPassword, "0", userProfession,
                     userPicture);
         } catch (DocumentException e) {
@@ -312,7 +317,11 @@ public class UserDialogPanel extends JPanel {
         }
     }
 
-    public int queryMaxUserId() {
+    /**
+     * 查询最大用户ID
+     */
+    private int queryMaxUserId() {
+        maxUserID = 0;
         List<User> userList = UserModel.getUserList();
         for (User user : userList) {
             String userID = user.getUserID();
@@ -351,9 +360,7 @@ public class UserDialogPanel extends JPanel {
         dialog.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                if (null != cameraDialogPanel) {
-                    cameraDialogPanel.getPanel().stop();
-                }
+                cameraDialogPanel.getPanel().stop();
                 super.windowClosing(e);
             }
         });
