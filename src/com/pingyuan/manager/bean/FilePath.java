@@ -1,5 +1,7 @@
 package com.pingyuan.manager.bean;
 
+import com.pingyuan.manager.utils.Logger;
+
 import java.util.ResourceBundle;
 
 public class FilePath {

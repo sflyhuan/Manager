@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class Log {
     private String userID;
+    private String deviceID;
     private String userName;
     private String date;
     private String action;
@@ -12,8 +13,9 @@ public class Log {
     public Log() {
     }
 
-    public Log(String userID, String userName, String date, String action, String userPicture) {
+    public Log(String userID, String deviceID,String userName, String date, String action, String userPicture) {
         this.userID = userID;
+        this.deviceID = deviceID;
         this.userName = userName;
         this.date = date;
         this.action = action;
@@ -58,5 +60,13 @@ public class Log {
 
     public void setUserPicture(String userPicture) {
         this.userPicture = userPicture;
+    }
+
+    public String getDeviceID() {
+        return deviceID;
+    }
+
+    public void setDeviceID(String deviceID) {
+        this.deviceID = deviceID;
     }
 }

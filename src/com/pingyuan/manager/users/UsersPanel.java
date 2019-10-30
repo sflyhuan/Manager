@@ -1,9 +1,14 @@
 package com.pingyuan.manager.users;
 
+import com.pingyuan.manager.adb.EquipmentEnum;
 import com.pingyuan.manager.bean.FilePath;
 import com.pingyuan.manager.bean.User;
+import com.pingyuan.manager.equipment.ButtonCellEditor;
+import com.pingyuan.manager.equipment.ButtonRenderer;
 import com.pingyuan.manager.utils.CustomDefaultTableModel;
 import com.pingyuan.manager.utils.MsgManager;
+import com.pingyuan.manager.utils.UserDefaultTableModel;
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -26,26 +31,40 @@ import java.util.Vector;
 public class UsersPanel extends JPanel {
     private List<User> mUserList = new ArrayList<>();
     private JTable mTable = null;
-    private CustomDefaultTableModel mDefaultTableModel; //表格模型
+    private UserDefaultTableModel mDefaultTableModel; //表格模型
     private JFrame jFrame;
 
     public UsersPanel(JFrame jFrame) {
         this.jFrame = jFrame;
         this.setLayout(new BorderLayout());
-        createButton();
+        createAddButton();
         createJTable();
+    }
+
+    private void createAddButton() {
+        JPanel panel = new JPanel(new BorderLayout());
+        JButton button = new JButton("新增用户");
+        panel.add(button, BorderLayout.EAST);
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showCustomDialog(jFrame, jFrame, true);
+            }
+        });
+        this.add(panel, BorderLayout.NORTH);
     }
 
     /**
      * 创建表格
      */
     private void createJTable() {
-        mDefaultTableModel = new CustomDefaultTableModel();
-        mDefaultTableModel.addColumn("序号");
+        mDefaultTableModel = new UserDefaultTableModel();
         mDefaultTableModel.addColumn("用户名");
         mDefaultTableModel.addColumn("登录ID");
         mDefaultTableModel.addColumn("用户类型");
         mDefaultTableModel.addColumn("用户专业");
+        mDefaultTableModel.addColumn("");
+        mDefaultTableModel.addColumn("");
 
         mTable = new JTable(mDefaultTableModel);
         mTable.setRowHeight(50);
@@ -61,19 +80,35 @@ public class UsersPanel extends JPanel {
         // 设置用户是否可以拖动列头，以重新排序各列。
         jTableHeader.setReorderingAllowed(false);
         ((DefaultTableCellRenderer) jTableHeader.getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
+        //设置单元格内容居中
+        DefaultTableCellRenderer render = new DefaultTableCellRenderer();
+        render.setHorizontalAlignment(SwingConstants.CENTER);
+
+        mTable.getColumnModel().getColumn(0).setCellRenderer(render);
+        mTable.getColumnModel().getColumn(1).setCellRenderer(render);
+        mTable.getColumnModel().getColumn(2).setCellRenderer(render);
+        mTable.getColumnModel().getColumn(3).setCellRenderer(render);
+
+        mTable.getColumnModel().getColumn(4).setCellRenderer(new ButtonRenderer());
+        mTable.getColumnModel().getColumn(4).setCellEditor(new ButtonCellEditor(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showCustomDialog(jFrame, jFrame, false);
+            }
+        }));
+        mTable.getColumnModel().getColumn(5).setCellRenderer(new ButtonRenderer());
+        mTable.getColumnModel().getColumn(5).setCellEditor(new ButtonCellEditor(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteUser();
+            }
+        }));
 
         mUserList = UserModel.getUserList();
         for (User user : mUserList) {
             addUserRow(user);
         }
-        //设置单元格内容居中
-        DefaultTableCellRenderer render = new DefaultTableCellRenderer();
-        render.setHorizontalAlignment(SwingConstants.CENTER);
-        mTable.getColumnModel().getColumn(0).setCellRenderer(render);
-        mTable.getColumnModel().getColumn(1).setCellRenderer(render);
-        mTable.getColumnModel().getColumn(2).setCellRenderer(render);
-        mTable.getColumnModel().getColumn(3).setCellRenderer(render);
-        mTable.getColumnModel().getColumn(4).setCellRenderer(render);
+
         JScrollPane pane = new JScrollPane(mTable);
         this.add(pane, BorderLayout.CENTER);
     }
@@ -85,58 +120,14 @@ public class UsersPanel extends JPanel {
      */
     private void addUserRow(User user) {
         Vector<Object> vector = new Vector<>();
-        vector.add(user.getUserID());
         vector.add(user.getUserName());
         vector.add(user.getLoginID());
         vector.add(user.getUserType().equalsIgnoreCase("1") ? "管理员" : "用户");
         vector.add(user.getUserProfession());
+        vector.add("/resources/edit.png");
+        vector.add("/resources/delete.png");
         mDefaultTableModel.addRow(vector);
     }
-
-    /**
-     * 创建按钮
-     */
-    private void createButton() {
-        JButton addBtn = new JButton("新增");
-        JButton modBtn = new JButton("修改");
-        JButton delBtn = new JButton("删除");
-        JPanel jPanel = new JPanel();
-        jPanel.add(addBtn);
-        jPanel.add(modBtn);
-        jPanel.add(delBtn);
-
-        addBtn.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.normal));
-        modBtn.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.normal));
-        delBtn.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.normal));
-
-        // 增加用户
-        addBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                showCustomDialog(jFrame, jFrame, true);
-            }
-        });
-
-        //修改用户
-        modBtn.addActionListener(new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (mTable.getSelectedRow() > 0) {
-                    showCustomDialog(jFrame, jFrame, false);
-                }
-            }
-        });
-
-        //删除选中用户
-        delBtn.addActionListener(new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                deleteUser();
-            }
-        });
-        this.add(jPanel, BorderLayout.SOUTH);
-    }
-
 
     /**
      * 显示一个自定义的对话框
@@ -161,6 +152,7 @@ public class UsersPanel extends JPanel {
             public void addSuccess(User user) {
                 addUserRow(user);
                 mUserList.add(user);
+                MsgManager.showMsg("新增用户成功");
                 dialog.dispose();
             }
 
@@ -171,6 +163,7 @@ public class UsersPanel extends JPanel {
                 mUserList.add(user);
                 mDefaultTableModel.removeRow(selectedRow);
                 mUserList.remove(selectedRow);
+                MsgManager.showMsg("更新用户成功");
                 dialog.dispose();
             }
 
@@ -200,7 +193,8 @@ public class UsersPanel extends JPanel {
      */
     private void deleteUser() {
         int i = mTable.getSelectedRow();
-        if (i == 0) {
+        if (i == -1) {
+            MsgManager.showMsg("请重新选择");
             return;
         }
         User user = mUserList.get(i);

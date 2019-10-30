@@ -13,7 +13,7 @@ public class ButtonRenderer extends DefaultTableCellRenderer {
 
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
                                                    boolean hasFocus, int row, int column) {
-        ImageIcon image = new ImageIcon((String) value);
+        ImageIcon image = new ImageIcon(ButtonRenderer.class.getResource(String.valueOf(value)));
         image.setImage(image.getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT));
         return new JLabel(image);
     }

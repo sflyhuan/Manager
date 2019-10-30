@@ -14,7 +14,7 @@ import java.util.List;
 public class LogModel {
     public static List<Log> getLogList(String deviceId) {
         List<Log> logList = new ArrayList<>();
-        String pullLogPath = FilePath.getSingleton().getPullLogPath() + deviceId + File.separator + "logs.xml";
+        String pullLogPath = FilePath.getSingleton().getPullLogPath() + deviceId + File.separator + "log/logs.xml";
         File file = new File(pullLogPath);
         if (!file.exists()) {
             return logList;
@@ -31,13 +31,40 @@ public class LogModel {
                     String date = element.elementText("date");
                     String action = element.elementText("action");
                     String userPicture = element.elementText("userPicture");
-                    logList.add(new Log(userID, userName, date, action, userPicture));
+                    logList.add(new Log(userID, deviceId, userName, date, action, userPicture));
                 }
             }
         } catch (DocumentException e) {
             e.printStackTrace();
         }
         return logList;
+    }
+
+    public static void deleteLog( Log log, LogPanel.OnLogListener onLogListener) {
+        String pullLogPath = FilePath.getSingleton().getPullLogPath() + log.getDeviceID() + File.separator + "log/logs.xml";
+        File file = new File(pullLogPath);
+        if (file.exists()) {
+            SAXReader saxReader = new SAXReader();
+            try {
+                Document document = saxReader.read(file);
+                Element rootElement = document.getRootElement();
+                List<Element> elementList = rootElement.elements("log");
+                if (elementList.size() > 0) {
+                    for (Element element : elementList) {
+                        String date = element.elementText("date");
+                        if (date.equalsIgnoreCase(log.getDate())) {
+                            rootElement.remove(element);
+                            if (onLogListener!=null){
+                                onLogListener.delete();
+                            }
+                            break;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static List<Log> getLogList() {

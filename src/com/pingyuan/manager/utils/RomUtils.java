@@ -21,6 +21,6 @@ public class RomUtils {
         brandHashMap.put("samsung", "三星");
         brandHashMap.put("meizu", "魅族");
         brandHashMap.put("lenovo", "联想");
-        return brandHashMap.getOrDefault(brand, brand);
+        return brandHashMap.getOrDefault(brand.toLowerCase(), brand);
     }
 }

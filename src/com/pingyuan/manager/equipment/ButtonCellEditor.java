@@ -23,7 +23,7 @@ public class ButtonCellEditor extends AbstractCellEditor implements TableCellEdi
     public Component getTableCellEditorComponent(JTable table, Object value,
                                                  boolean isSelected, int row, int column) {
         mValue=value;
-        ImageIcon image = new ImageIcon((String) value);
+        ImageIcon image = new ImageIcon(ButtonRenderer.class.getResource(String.valueOf(value)));
         image.setImage(image.getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT));
         mJButton.setIcon(image);
         return mJButton;

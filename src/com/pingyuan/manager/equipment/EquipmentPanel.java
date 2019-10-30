@@ -1,18 +1,14 @@
 package com.pingyuan.manager.equipment;
 
-import com.pingyuan.manager.Main;
 import com.pingyuan.manager.adb.*;
 import com.pingyuan.manager.bean.Device;
 import com.pingyuan.manager.bean.FilePath;
+import com.pingyuan.manager.test.TestMain;
 import com.pingyuan.manager.utils.CustomDefaultTableModel;
 import com.pingyuan.manager.utils.MsgManager;
-import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -29,8 +25,6 @@ public class EquipmentPanel extends JPanel {
 
     public EquipmentPanel() {
         this.setLayout(new BorderLayout());
-        //创建按钮
-        createButton();
         //创建表格
         createJTable();
         //开启ADB服务
@@ -45,8 +39,8 @@ public class EquipmentPanel extends JPanel {
                     vector.add(device.getAndroidBrand());
                     vector.add(device.getAndroidModel());
                     vector.add(device.getEquipmentEnum().getName());
-                    vector.add("src\\resources\\push.png");
-                    vector.add("src\\resources\\pull.png");
+                    vector.add("/resources/push.png");
+                    vector.add("/resources/pull.png");
                     mDefaultTableModel.addRow(vector);
                 }
             }
@@ -68,33 +62,6 @@ public class EquipmentPanel extends JPanel {
                 mDeviceList.removeAll(deviceList);
             }
         });
-    }
-
-    /**
-     * 创建按钮
-     */
-    private void createButton() {
-        JButton pushBtn = new JButton("推送");
-        JButton pullBtn = new JButton("取回");
-        JPanel jPanel = new JPanel();
-        jPanel.add(pushBtn);
-        jPanel.add(pullBtn);
-        pushBtn.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.normal));
-        pullBtn.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.normal));
-        pushBtn.addActionListener(new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updateData(EquipmentEnum.PUSH);
-            }
-        });
-
-        pullBtn.addActionListener(new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updateData(EquipmentEnum.PULL);
-            }
-        });
-        this.add(jPanel, BorderLayout.SOUTH);
     }
 
     /**
@@ -134,6 +101,7 @@ public class EquipmentPanel extends JPanel {
                                     if (device != null) {
                                         device.setEquipmentEnum(EquipmentEnum.ERROR);
                                         mDefaultTableModel.setValueAt(EquipmentEnum.ERROR.getName(), selectedRow, 4);
+                                        MsgManager.showMsg(device.getId() + "推送数据异常，请重试");
                                     }
                                 }
 
@@ -141,7 +109,8 @@ public class EquipmentPanel extends JPanel {
                                 public void onFinish() {
                                     if (device != null) {
                                         device.setEquipmentEnum(EquipmentEnum.UNKNOW);
-                                        mDefaultTableModel.setValueAt(EquipmentEnum.UNKNOW.getName(), selectedRow, 4);
+                                        mDefaultTableModel.setValueAt("推送完成", selectedRow, 4);
+                                        MsgManager.showMsg(device.getId() + "推送完成");
                                     }
                                 }
                             });
@@ -176,6 +145,7 @@ public class EquipmentPanel extends JPanel {
                                     if (device != null) {
                                         device.setEquipmentEnum(EquipmentEnum.ERROR);
                                         mDefaultTableModel.setValueAt(EquipmentEnum.ERROR.getName(), selectedRow, 4);
+                                        MsgManager.showMsg(device.getId() + "取回数据异常，请重试");
                                     }
                                 }
 
@@ -183,7 +153,8 @@ public class EquipmentPanel extends JPanel {
                                 public void onFinish() {
                                     if (device != null) {
                                         device.setEquipmentEnum(EquipmentEnum.UNKNOW);
-                                        mDefaultTableModel.setValueAt(EquipmentEnum.UNKNOW.getName(), selectedRow, 4);
+                                        mDefaultTableModel.setValueAt("取回完成", selectedRow, 4);
+                                        MsgManager.showMsg(device.getId() + "取回完成");
                                     }
                                 }
                             });
@@ -204,8 +175,8 @@ public class EquipmentPanel extends JPanel {
         mDefaultTableModel.addColumn("平台");
         mDefaultTableModel.addColumn("型号");
         mDefaultTableModel.addColumn("状态");
-        mDefaultTableModel.addColumn("推送");
-        mDefaultTableModel.addColumn("取回");
+        mDefaultTableModel.addColumn("");
+        mDefaultTableModel.addColumn("");
 
         mTable = new JTable(mDefaultTableModel);
         mTable.setRowHeight(50);
@@ -220,20 +191,17 @@ public class EquipmentPanel extends JPanel {
         jTableHeader.setResizingAllowed(false);
         // 设置用户是否可以拖动列头，以重新排序各列。
         jTableHeader.setReorderingAllowed(false);
-        ((DefaultTableCellRenderer)jTableHeader.getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
+        ((DefaultTableCellRenderer) jTableHeader.getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
 
         mTable.getColumnModel().getColumn(5).setCellRenderer(new ButtonRenderer());
         mTable.getColumnModel().getColumn(5).setCellEditor(new ButtonCellEditor(e -> {
-            int selectedRow = mTable.getSelectedRow();
-            MsgManager.showMsg(selectedRow + "");
+            updateData(EquipmentEnum.PUSH);
         }));
         mTable.getColumnModel().getColumn(6).setCellRenderer(new ButtonRenderer());
         mTable.getColumnModel().getColumn(6).setCellEditor(new ButtonCellEditor(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //updateData(EquipmentEnum.PUSH);
-               // updateData(EquipmentEnum.PULL);
-
+                updateData(EquipmentEnum.PULL);
             }
         }));
 

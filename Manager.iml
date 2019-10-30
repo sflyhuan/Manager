@@ -9,12 +9,11 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="beautyeye_lnf" level="project" />
     <orderEntry type="library" name="bridj-0.7.0" level="project" />
-    <orderEntry type="library" name="slf4j-api-1.7.2" level="project" />
     <orderEntry type="library" name="webcam-capture-0.3.12" level="project" />
     <orderEntry type="library" name="dom4j-1.6.1" level="project" />
     <orderEntry type="library" name="bridj-0.7.0" level="project" />
-    <orderEntry type="library" name="slf4j-api-1.7.25" level="project" />
     <orderEntry type="library" name="slf4j-api-1.7.28" level="project" />
     <orderEntry type="library" name="slf4j-simple-1.7.28" level="project" />
+    <orderEntry type="library" name="Draw9Patch4j_alone" level="project" />
   </component>
 </module>

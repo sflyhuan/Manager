@@ -14,17 +14,15 @@ public class MainFrame extends JFrame {
 
     EquipmentPanel equipmentPanel = new EquipmentPanel();  //设备
     UsersPanel usersPanel = new UsersPanel(this);
-    LogPanel logPanel = new LogPanel();
+    LogPanel logPanel = new LogPanel(this);
     OtherPanel otherPanel = new OtherPanel();
-
-
 
     public MainFrame() {//构造函数
         jtp.setBackground(Color.WHITE);
         jtp.add("接入设备管理", equipmentPanel);
         jtp.add("用户管理", usersPanel);
         jtp.add("日志管理", logPanel);
-        jtp.add("其他", otherPanel);
+        jtp.add("配置管理", otherPanel);
 
         this.add(jtp);
         this.setTitle("XXXX平板助手管理端");
@@ -34,6 +32,9 @@ public class MainFrame extends JFrame {
         //显示窗口true
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        ImageIcon icon = new ImageIcon(MainFrame.class.getResource("/resources/icon.jpg"));//图片位于工程根目录
+        this.setIconImage(icon.getImage());
     }
 
 }

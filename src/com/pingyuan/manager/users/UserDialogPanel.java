@@ -2,6 +2,7 @@ package com.pingyuan.manager.users;
 
 import com.pingyuan.manager.bean.FilePath;
 import com.pingyuan.manager.bean.User;
+import com.pingyuan.manager.equipment.ButtonRenderer;
 import com.pingyuan.manager.utils.ChineseUtil;
 import com.pingyuan.manager.utils.MsgManager;
 import org.dom4j.Document;
@@ -88,13 +89,13 @@ public class UserDialogPanel extends JPanel {
 
         JPanel imgPanel = new JPanel();
         mImgLabel = new JLabel();
-        String path = "src/com/pingyuan/manager/users/default_user.jpeg";
-
+        ImageIcon image =null;
         if (mUser != null) {
             mUserPicture = mUser.getUserPicture();
-            path = FilePath.getSingleton().getPushFacePath() + mUser.getUserPicture() + ".png";
+            image=new ImageIcon(FilePath.getSingleton().getPushFacePath() + mUser.getUserPicture() + ".png");
+        }else {
+            image=new ImageIcon(ButtonRenderer.class.getResource("/resources/default_user.jpeg"));
         }
-        ImageIcon image = new ImageIcon(path);
         image.setImage(image.getImage().getScaledInstance(350, 350, Image.SCALE_DEFAULT));
         mImgLabel.setIcon(image);
         imgPanel.add(mImgLabel);

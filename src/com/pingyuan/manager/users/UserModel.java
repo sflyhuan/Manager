@@ -42,6 +42,7 @@ public class UserModel {
                     userList.add(new User(userID, userName, loginID, loginPassword, userType, userProfession, userPicture));
                 }
             }
+            UserModel.saveDocument(file,document);
         } catch (DocumentException e) {
             e.printStackTrace();
         }
