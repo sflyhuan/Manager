@@ -13,7 +13,11 @@ public enum EquipmentEnum {
     /**
      * 无
      */
-    UNKNOW("待机中");
+    UNKNOW("待机中"),
+    /**
+     * 无
+     */
+    ERROR("发生错误");
 
 
     private String name;

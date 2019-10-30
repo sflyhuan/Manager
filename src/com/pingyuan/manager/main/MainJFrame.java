@@ -2,6 +2,7 @@ package com.pingyuan.manager.main;
 
 import com.pingyuan.manager.equipment.EquipmentJPanel;
 import com.pingyuan.manager.logs.LogsJPanel;
+import com.pingyuan.manager.other.OtherJPanel;
 import com.pingyuan.manager.users.UsersJPanel;
 
 import javax.swing.*;
@@ -14,6 +15,7 @@ public class MainJFrame extends JFrame {
     EquipmentJPanel equipmentJPanel = new EquipmentJPanel();  //设备
     UsersJPanel usersJPanel = new UsersJPanel(this);
     LogsJPanel logsJPanel = new LogsJPanel();
+    OtherJPanel otherJPanel = new OtherJPanel();
 
 
 
@@ -22,6 +24,7 @@ public class MainJFrame extends JFrame {
         jtp.add("接入设备管理", equipmentJPanel);
         jtp.add("用户管理", usersJPanel);
         jtp.add("日志管理", logsJPanel);
+        jtp.add("其他", otherJPanel);
 
         this.add(jtp);
         this.setTitle("平板助手管理系统");

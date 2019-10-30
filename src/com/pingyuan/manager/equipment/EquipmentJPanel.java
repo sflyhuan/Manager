@@ -127,7 +127,10 @@ public class EquipmentJPanel extends JPanel {
 
                                 @Override
                                 public void onError(String msg) {
-
+                                    if (device != null) {
+                                        device.setEquipmentEnum(EquipmentEnum.ERROR);
+                                        mDefaultTableModel.setValueAt(EquipmentEnum.ERROR.getName(), selectedRow, 4);
+                                    }
                                 }
 
                                 @Override
@@ -158,7 +161,10 @@ public class EquipmentJPanel extends JPanel {
 
                                 @Override
                                 public void onError(String msg) {
-
+                                    if (device != null) {
+                                        device.setEquipmentEnum(EquipmentEnum.ERROR);
+                                        mDefaultTableModel.setValueAt(EquipmentEnum.ERROR.getName(), selectedRow, 4);
+                                    }
                                 }
 
                                 @Override
