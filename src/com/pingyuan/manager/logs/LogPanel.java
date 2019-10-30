@@ -1,6 +1,7 @@
 package com.pingyuan.manager.logs;
 
 import com.pingyuan.manager.bean.Log;
+import com.pingyuan.manager.utils.CustomDefaultTableModel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -12,7 +13,7 @@ import java.util.Vector;
 public class LogPanel extends JPanel {
     private List<Log> logList = new ArrayList<>();
     private JTable jtable = null;
-    private DefaultTableModel defaultTableModel; //表格模型
+    private CustomDefaultTableModel defaultTableModel; //表格模型
 
     public LogPanel(){
         this.setLayout(new BorderLayout());
@@ -25,7 +26,7 @@ public class LogPanel extends JPanel {
      */
 
     private void createJTable() {
-        defaultTableModel = new DefaultTableModel();
+        defaultTableModel = new CustomDefaultTableModel();
         defaultTableModel.addColumn("用户名");
         defaultTableModel.addColumn("登陆日期");
         defaultTableModel.addColumn("行为");

@@ -6,7 +6,8 @@ import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
 import javax.swing.*;
 import javax.swing.plaf.InsetsUIResource;
 
-public class Main {
+public class
+Main {
 
     public static final String SERVER_ROOT_PATH ="d://test//py-data";
     public static final String CLIENT_ROOT_PATH ="//sdcard//py-data";

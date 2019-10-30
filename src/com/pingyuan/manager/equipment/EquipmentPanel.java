@@ -74,7 +74,7 @@ public class EquipmentPanel extends JPanel {
      * 创建按钮
      */
     private void createButton() {
-        JButton pushBtn = new JButton("更新");
+        JButton pushBtn = new JButton("推送");
         JButton pullBtn = new JButton("取回");
         JPanel jPanel = new JPanel();
         jPanel.add(pushBtn);
@@ -231,6 +231,8 @@ public class EquipmentPanel extends JPanel {
         mTable.getColumnModel().getColumn(6).setCellEditor(new ButtonCellEditor(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //updateData(EquipmentEnum.PUSH);
+               // updateData(EquipmentEnum.PULL);
 
             }
         }));

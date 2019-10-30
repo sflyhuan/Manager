@@ -2,6 +2,7 @@ package com.pingyuan.manager.users;
 
 import com.pingyuan.manager.bean.FilePath;
 import com.pingyuan.manager.bean.User;
+import com.pingyuan.manager.utils.CustomDefaultTableModel;
 import com.pingyuan.manager.utils.MsgManager;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -10,7 +11,9 @@ import org.dom4j.io.SAXReader;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,7 +26,7 @@ import java.util.Vector;
 public class UsersPanel extends JPanel {
     private List<User> mUserList = new ArrayList<>();
     private JTable mTable = null;
-    private DefaultTableModel mDefaultTableModel; //表格模型
+    private CustomDefaultTableModel mDefaultTableModel; //表格模型
     private JFrame jFrame;
 
     public UsersPanel(JFrame jFrame) {
@@ -37,25 +40,41 @@ public class UsersPanel extends JPanel {
      * 创建表格
      */
     private void createJTable() {
-        mDefaultTableModel = new DefaultTableModel();
-        mDefaultTableModel.addColumn("ID");
+        mDefaultTableModel = new CustomDefaultTableModel();
+        mDefaultTableModel.addColumn("序号");
         mDefaultTableModel.addColumn("用户名");
         mDefaultTableModel.addColumn("登录ID");
         mDefaultTableModel.addColumn("用户类型");
         mDefaultTableModel.addColumn("用户专业");
 
+        mTable = new JTable(mDefaultTableModel);
+        mTable.setRowHeight(50);
+        mTable.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
+        mTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        mTable.setShowHorizontalLines(true);
+        mTable.setShowVerticalLines(false);
+        mTable.setRowSelectionAllowed(false);
+        // 获取表头
+        JTableHeader jTableHeader = mTable.getTableHeader();
+        // 设置用户是否可以通过在头间拖动来调整各列的大小。
+        jTableHeader.setResizingAllowed(false);
+        // 设置用户是否可以拖动列头，以重新排序各列。
+        jTableHeader.setReorderingAllowed(false);
+        ((DefaultTableCellRenderer) jTableHeader.getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
+
         mUserList = UserModel.getUserList();
         for (User user : mUserList) {
             addUserRow(user);
         }
-        mTable = new JTable(mDefaultTableModel);
-        mTable.setRowHeight(50);
-        mTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        mTable.setShowHorizontalLines(true);
-        mTable.setShowVerticalLines(false);
-        this.add(mTable.getTableHeader(), BorderLayout.NORTH);
+        //设置单元格内容居中
+        DefaultTableCellRenderer render = new DefaultTableCellRenderer();
+        render.setHorizontalAlignment(SwingConstants.CENTER);
+        mTable.getColumnModel().getColumn(0).setCellRenderer(render);
+        mTable.getColumnModel().getColumn(1).setCellRenderer(render);
+        mTable.getColumnModel().getColumn(2).setCellRenderer(render);
+        mTable.getColumnModel().getColumn(3).setCellRenderer(render);
+        mTable.getColumnModel().getColumn(4).setCellRenderer(render);
         JScrollPane pane = new JScrollPane(mTable);
-
         this.add(pane, BorderLayout.CENTER);
     }
 
@@ -168,7 +187,7 @@ public class UsersPanel extends JPanel {
 
             @Override
             public void addFailed() {
-                MsgManager.showMsg("更新新增户异常，请重试");
+                MsgManager.showMsg("新增用户异常，请重试");
                 dialog.dispose();
             }
         }));

@@ -27,9 +27,10 @@ public class MainFrame extends JFrame {
         jtp.add("其他", otherPanel);
 
         this.add(jtp);
-        this.setTitle("平板助手管理系统");
+        this.setTitle("XXXX平板助手管理端");
         this.setSize(1100, 660);
         this.setLocation(0, 0);
+        this.setResizable(false); //禁止改变窗体大小
         //显示窗口true
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
