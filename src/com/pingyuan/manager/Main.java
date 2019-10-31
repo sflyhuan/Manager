@@ -18,6 +18,7 @@ Main {
             BeautyEyeLNFHelper.launchBeautyEyeLNF();
             UIManager.put("RootPane.setupButtonVisible", false); //去掉设置按钮
             UIManager.put("TabbedPane.tabAreaInsets", new InsetsUIResource(3, 0, 2, 20));
+            BeautyEyeLNFHelper.translucencyAtFrameInactive = false;
         } catch (Exception e) {
             e.printStackTrace();
         }

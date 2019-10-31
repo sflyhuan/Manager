@@ -2,6 +2,7 @@ package com.pingyuan.manager.users;
 
 import com.pingyuan.manager.bean.FilePath;
 import com.pingyuan.manager.bean.User;
+import com.pingyuan.manager.utils.JsoupManager;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -42,23 +43,10 @@ public class UserModel {
                     userList.add(new User(userID, userName, loginID, loginPassword, userType, userProfession, userPicture));
                 }
             }
-            UserModel.saveDocument(file,document);
+            JsoupManager.saveDocument(file,document);
         } catch (DocumentException e) {
             e.printStackTrace();
         }
         return userList;
-    }
-
-    public static void saveDocument(File file,Document document){
-        OutputFormat format = OutputFormat.createPrettyPrint();
-        format.setEncoding("UTF-8");
-        try {
-            XMLWriter writer = new XMLWriter(new FileWriter(file), format);
-            //写入数据
-            writer.write(document);
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

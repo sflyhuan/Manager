@@ -1,7 +1,5 @@
 package com.pingyuan.manager.bean;
 
-import java.util.Date;
-
 public class Log {
     private String userID;
     private String deviceID;

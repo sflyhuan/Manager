@@ -1,6 +1,7 @@
 package com.pingyuan.manager.other;
 
 import com.pingyuan.manager.bean.FilePath;
+import com.pingyuan.manager.utils.MsgManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,11 +35,12 @@ public class OtherPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
             case "更新索引":
-
+                MsgManager.showMsg("索引更新完成");
                 break;
-            case "打开资源文件夹":
+            case "打开用户资料文件夹":
                 try {
-                    Desktop.getDesktop().open(new File(FilePath.getSingleton().getPushCustomPath()));
+                    File file = new File(FilePath.getSingleton().getPushCustomPath());
+                    Desktop.getDesktop().open(file);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }

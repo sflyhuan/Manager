@@ -4,6 +4,7 @@ import com.pingyuan.manager.bean.FilePath;
 import com.pingyuan.manager.bean.User;
 import com.pingyuan.manager.equipment.ButtonRenderer;
 import com.pingyuan.manager.utils.ChineseUtil;
+import com.pingyuan.manager.utils.JsoupManager;
 import com.pingyuan.manager.utils.MsgManager;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -278,7 +279,7 @@ public class UserDialogPanel extends JPanel {
                     }
                 }
             }
-            UserModel.saveDocument(file, document);
+            JsoupManager.saveDocument(file, document);
             return mUser;
         } catch (DocumentException e) {
             e.printStackTrace();
@@ -309,7 +310,7 @@ public class UserDialogPanel extends JPanel {
             user.addElement("userProfession").setText(userProfession);
             user.addElement("userPicture").setText(userPicture);
 
-            UserModel.saveDocument(file, document);
+            JsoupManager.saveDocument(file, document);
             return new User(maxUserId, userName, loginID, loginPassword, "0", userProfession,
                     userPicture);
         } catch (DocumentException e) {

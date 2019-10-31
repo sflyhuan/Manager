@@ -110,17 +110,19 @@ public class DeviceMonitorService {
     private List<Device> findDevices(String[] deviceStrs) {
         List<Device> devices = new ArrayList<>();
         for (String deviceStr : deviceStrs) {
-            String[] deviceDescriptionSplit = deviceStr.split("\\s+");
-            String deviceId = deviceDescriptionSplit[0];
-            Device device = new Device();
-            for (String descriptionTemp : deviceDescriptionSplit) {
-                if (descriptionTemp.contains("model:")) {
-                    String state = descriptionTemp.split("model:")[1];
-                    device.setDeviceEnum(DeviceEnum.getDeviceState(state));
+            if (!"".equalsIgnoreCase(deviceStr) && !deviceStr.contains("daemon")){
+                String[] deviceDescriptionSplit = deviceStr.split("\\s+");
+                String deviceId = deviceDescriptionSplit[0];
+                Device device = new Device();
+                for (String descriptionTemp : deviceDescriptionSplit) {
+                    if (descriptionTemp.contains("model:")) {
+                        String state = descriptionTemp.split("model:")[1];
+                        device.setDeviceEnum(DeviceEnum.getDeviceState(state));
+                    }
                 }
+                device.setId(deviceId);
+                devices.add(device);
             }
-            device.setId(deviceId);
-            devices.add(device);
         }
         return devices;
     }

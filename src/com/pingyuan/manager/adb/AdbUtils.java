@@ -76,9 +76,7 @@ public class AdbUtils {
             command = command.replaceFirst("adb", "");
         }
 
-        //TODO 获取选择的devices
-        Device selectedDevice = null;
-        return new File(AdbUtils.class.getResource("/resources/adb.exe")+" ").getAbsolutePath()
+        return AdbUtils.class.getResource("/resources/adb.exe").getPath()+" "
                 + (deviceId != null ? "-s " + deviceId + " " : "") + command;
     }
 

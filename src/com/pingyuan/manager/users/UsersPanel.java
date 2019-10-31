@@ -6,6 +6,7 @@ import com.pingyuan.manager.bean.User;
 import com.pingyuan.manager.equipment.ButtonCellEditor;
 import com.pingyuan.manager.equipment.ButtonRenderer;
 import com.pingyuan.manager.utils.CustomDefaultTableModel;
+import com.pingyuan.manager.utils.JsoupManager;
 import com.pingyuan.manager.utils.MsgManager;
 import com.pingyuan.manager.utils.UserDefaultTableModel;
 import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
@@ -233,7 +234,7 @@ public class UsersPanel extends JPanel {
                     }
                 }
             }
-            UserModel.saveDocument(file, document);
+            JsoupManager.saveDocument(file, document);
         } catch (DocumentException e) {
             e.printStackTrace();
         }
